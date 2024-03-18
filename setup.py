@@ -6,7 +6,7 @@ setup(
     description='Python Package for working with BabyD System',
     url='#',
     author='Matt Larkin',
-    install_requires=['numpy', 'matplotlib', 'h5py', 'pandas'],
+    install_requires=['numpy', 'matplotlib', 'h5py', 'pandas', 'scipy'],
     author_email='mlarkin863@gmail.com',
     packages=find_packages(),
     zip_safe=False
