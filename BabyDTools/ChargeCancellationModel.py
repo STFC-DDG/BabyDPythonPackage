@@ -43,10 +43,17 @@ def Charge_to_Energy(Charge): #TODO Need to change this so that pair production 
         Energy_eqv (float): The calculated energy equivalent charge for a CZT detector. Units given in electron volts (eV).
     """
     # constants
-    pair_production = 4.6 # e-h pair production energy / eV
+    pair_production = 4.64 # e-h pair production energy / eV
     e = 1.602e-19 # electron charge / C
     Energy_eqv = Charge * (pair_production/e) # equivalent energy in CZT (based on pair production energy)
     return Energy_eqv
+
+def IDAC_to_Energy(CurrentMagnitude, InjectionClocks, IDAC_ID='IDACCal'):
+    
+    Charge = IDAC_to_Charge(CurrentMagnitude=CurrentMagnitude, InjectionClocks=InjectionClocks, IDAC_ID=IDAC_ID)
+    Energy = Charge_to_Energy(Charge=Charge)
+    
+    return Energy
 
 def Charge_to_CapacitorVoltage(Charge,Stage_Select):
     """Function which packages the conversion of charge to voltage stored on a capacitor of set capacitance.
@@ -260,14 +267,6 @@ print(FC2 + 0.00250)
 #%%
 
 # print(Readout(100,25,IDACCancel1=1502, IDACCancel2=1640, VoutTH1=1970, VoutTH2=1100))
-
-
-def IDAC_to_Energy(CurrentMagnitude, InjectionClocks, IDAC_ID='IDACCal'):
-    
-    Charge = IDAC_to_Charge(CurrentMagnitude=CurrentMagnitude, InjectionClocks=InjectionClocks, IDAC_ID=IDAC_ID)
-    Energy = Charge_to_Energy(Charge=Charge)
-    
-    return Energy
 
 # I want to inject 1 coarse count which for the settings we want is equivalent to 25 photons at 30 keV
 

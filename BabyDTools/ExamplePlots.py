@@ -123,6 +123,22 @@ def histogram_array(array, plotcoarse = True, numslices = 5, limfine = False, li
         return fineaves, coarseaves
     
 def histogram_pixel(array, pixel_sel = (8,8), plottitle = 'Histogram of Pixel Output', plotcoarse = True, print_std = True, set_limfine = False, limfine = (0,128), set_limcoarse = False, limcoarse = (0,256), save_plot = False, savedir = 'plots', plotname = None):
+    """Takes in data array of format [xs,frames,ys,output_type] which has general shape of [16,N,16,3]
+
+    Args:
+        array (_type_): _description_
+        pixel_sel (tuple, optional): _description_. Defaults to (8,8).
+        plottitle (str, optional): _description_. Defaults to 'Histogram of Pixel Output'.
+        plotcoarse (bool, optional): _description_. Defaults to True.
+        print_std (bool, optional): _description_. Defaults to True.
+        set_limfine (bool, optional): _description_. Defaults to False.
+        limfine (tuple, optional): _description_. Defaults to (0,128).
+        set_limcoarse (bool, optional): _description_. Defaults to False.
+        limcoarse (tuple, optional): _description_. Defaults to (0,256).
+        save_plot (bool, optional): _description_. Defaults to False.
+        savedir (str, optional): _description_. Defaults to 'plots'.
+        plotname (_type_, optional): _description_. Defaults to None.
+    """
     
     fig = plt.figure(figsize=(7,6))
 
@@ -163,3 +179,6 @@ def histogram_pixel(array, pixel_sel = (8,8), plottitle = 'Histogram of Pixel Ou
     if print_std is True:
         print('Fine Stage Standard Deviation for pixel (8,8) = ',np.std(array[pixel_sel[0],:,pixel_sel[1],1]))
         print('Coarse Stage Standard Deviation for pixel (8,8) = ',np.std(array[pixel_sel[0],:,pixel_sel[1],0]))
+        
+        
+#* Automated plots for bias setting sweeps to use within "CalibrateASIC.py"
