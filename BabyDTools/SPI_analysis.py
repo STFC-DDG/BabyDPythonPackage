@@ -156,7 +156,7 @@ def build_array(datastore):
     
 #     return darkcorrected
 
-def paramsweep_loaddata(folderpath, ParamSweepStep = 1, pixel_select = 8, AverageData = False): #! will improve later to allow for multiple pixels but not a priority rn
+def paramsweep_loaddata(folderpath, ParamSweepStep = 1, pixel_select = 8, row_select = 0, AverageData = False): #! will improve later to allow for multiple pixels but not a priority rn
     """Loads in folder containing all of the data files for parameter sweep. By default returns an 4 dimensional array containing the sweep output: [N_captures,N_files,Npixels,3] 
     and a 1-D array containg the values of the sweeped parameter. The final index of the sweeped values returns the coarse data [0], fine data [1], or overflow value [2].
     With the "AverageData" argument set to "True" an additional variable will be returned which averages over the "N_captures" and calculates the standard deviation. 
@@ -167,6 +167,8 @@ def paramsweep_loaddata(folderpath, ParamSweepStep = 1, pixel_select = 8, Averag
     Args:
         folderpath (_type_): _description_
         ParamSweepStep (int, optional): _description_. Defaults to 1.
+        pixel_select (int, optional): _description_. Defaults to 8.
+        row_select (int, optional): Can only take values 0 or 1 and correspond to the first or second row in the 2 row SPI readout file. For even numbered row, input 0, for odd numbered row, input 1. Defaults to 0.
         AverageData (bool, optional): _description_. Defaults to False.
 
     Returns:
@@ -181,15 +183,17 @@ def paramsweep_loaddata(folderpath, ParamSweepStep = 1, pixel_select = 8, Averag
             datastore = load_data(filepath = folderpath + '/' + file, framecapture = False, printkeys = False)
             for key, item in datastore.items():
                 ParamSweeped  += [int(file.split(f'step{ParamSweepStep}')[1].split('_')[0])]
-                ParentDatastore += [item[0,:,:,:]]
+                ParentDatastore += [item[row_select,:,:,:]] # row_select can only take values 0 or 1 and correspond to the first or second row in the 2 row SPI readout file.
                 
+    ParentDatastore = np.array(ParentDatastore)
     
+    OrderedData = np.zeros_like(ParentDatastore[:,:,pixel_select,:]) # can only do this because step is 1
     
-    OrderedData = np.zeros_like(np.array(ParentDatastore)[:,:,8,:]) # can only do this because step is 1
+    offset = int(file.split('start')[1].split('stop')[0])
 
     for i in range(len(ParamSweeped)):
-        OrderedData[ParamSweeped[i],:,1] = ParentDatastore[i,:,8,1]# fine
-        OrderedData[ParamSweeped[i],:,0] = ParentDatastore[i,:,8,0]# coarse
+        OrderedData[ParamSweeped[i] - offset,:,1] = ParentDatastore[i,:,pixel_select,1]# fine
+        OrderedData[ParamSweeped[i] - offset,:,0] = ParentDatastore[i,:,pixel_select,0]# coarse
     
     OrderedParamSweeped = sorted(ParamSweeped)
     
