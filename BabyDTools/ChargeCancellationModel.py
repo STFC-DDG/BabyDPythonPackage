@@ -270,7 +270,7 @@ print(FC2 + 0.00250)
 
 # I want to inject 1 coarse count which for the settings we want is equivalent to 25 photons at 30 keV
 
-print(IDAC_to_Energy(100,53)/(1000*30)/ 0.25) 
+print(IDAC_to_Energy(100,200)/(1000)) 
 
 
 # want to then vary voutTH1 until for the above IDACCal and TPP we get a fine output of 100 lsb + 3 lsb for dark correction
