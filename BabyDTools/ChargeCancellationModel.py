@@ -241,43 +241,43 @@ def Readout(CurrentMagnitude, InjectionClocks, IDACCancel1 = 1502, VoutTH1 = 176
     return ReadoutList
 
 
-#%%  ###* Testing Area ###
+# #%%  ###* Testing Area ###
 
-# need to calculate how much charge is equivalent to 0.25 of a 30 keV photon,  
-# what the threshold VDAC would be and what the cancellation IDAC should be?
+# # need to calculate how much charge is equivalent to 0.25 of a 30 keV photon,  
+# # what the threshold VDAC would be and what the cancellation IDAC should be?
 
-FineEnergy = 0.25 * 30 # 7.5 keV
+# FineEnergy = 0.25 * 30 # 7.5 keV
 
-pair_production = 4.64 # ev / e-h pair production energy
-e = 1.602e-19 # electron charge / C
+# pair_production = 4.64 # ev / e-h pair production energy
+# e = 1.602e-19 # electron charge / C
 
-FineCharge = (FineEnergy * 1000 * e) / pair_production # factor 1000 needed to convert from keV to eV
+# FineCharge = (FineEnergy * 1000 * e) / pair_production # factor 1000 needed to convert from keV to eV
 
-# now we have charge we need to branch and calculate:
-# 1. Charge stored on fine stage capacitor -> VoutTH2
-FC2 = Charge_to_CapacitorVoltage(FineCharge/4,Stage_Select='2') # the divide by 4 is a guess
-print(FC2 + 0.00250)
-
-
+# # now we have charge we need to branch and calculate:
+# # 1. Charge stored on fine stage capacitor -> VoutTH2
+# FC2 = Charge_to_CapacitorVoltage(FineCharge/4,Stage_Select='2') # the divide by 4 is a guess
+# print(FC2 + 0.00250)
 
 
-# 2. Charge cancelled on by fine stage cancel clock - IDACCancel2
 
 
-#%%
-
-# print(Readout(100,25,IDACCancel1=1502, IDACCancel2=1640, VoutTH1=1970, VoutTH2=1100))
-
-# I want to inject 1 coarse count which for the settings we want is equivalent to 25 photons at 30 keV
-
-print(IDAC_to_Energy(100,200)/(1000)) 
+# # 2. Charge cancelled on by fine stage cancel clock - IDACCancel2
 
 
-# want to then vary voutTH1 until for the above IDACCal and TPP we get a fine output of 100 lsb + 3 lsb for dark correction
+# #%%
 
-print(Readout(100,54,IDACCancel1=1680, IDACCancel2=1200, VoutTH1=1750, VoutTH2=1030))
+# # print(Readout(100,25,IDACCancel1=1502, IDACCancel2=1640, VoutTH1=1970, VoutTH2=1100))
+
+# # I want to inject 1 coarse count which for the settings we want is equivalent to 25 photons at 30 keV
+
+# print(IDAC_to_Energy(100,200)/(1000)) 
 
 
-print('Vrefamp = ', VDAC_to_voltage(2268, VrefAmp=True))
-print('VoutTH1 = ', VDAC_to_voltage(2268))
-print('VoutTH2 = ', VDAC_to_voltage(2268))
+# # want to then vary voutTH1 until for the above IDACCal and TPP we get a fine output of 100 lsb + 3 lsb for dark correction
+
+# print(Readout(100,54,IDACCancel1=1680, IDACCancel2=1200, VoutTH1=1750, VoutTH2=1030))
+
+
+# print('Vrefamp = ', VDAC_to_voltage(2268, VrefAmp=True))
+# print('VoutTH1 = ', VDAC_to_voltage(2268))
+# print('VoutTH2 = ', VDAC_to_voltage(2268))

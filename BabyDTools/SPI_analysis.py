@@ -187,13 +187,29 @@ def paramsweep_loaddata(folderpath, ParamSweepStep = 1, pixel_select = 8, row_se
                 
     ParentDatastore = np.array(ParentDatastore)
     
-    OrderedData = np.zeros_like(ParentDatastore[:,:,pixel_select,:]) # can only do this because step is 1
+    if isinstance(pixel_select, str):
+        if pixel_select.lower == 'all':
+            OrderedData = np.zeros_like(ParentDatastore[:,:,:,:]) # can only do this because step is 1
+        else:
+            print("invalid pixel selection, did you mean 'all', or a an index from 0 to 15?")
+    else:
+        OrderedData = np.zeros_like(ParentDatastore[:,:,pixel_select,:]) # can only do this because step is 1
     
     offset = int(file.split('start')[1].split('stop')[0])
 
     for i in range(len(ParamSweeped)):
-        OrderedData[ParamSweeped[i] - offset,:,1] = ParentDatastore[i,:,pixel_select,1]# fine
-        OrderedData[ParamSweeped[i] - offset,:,0] = ParentDatastore[i,:,pixel_select,0]# coarse
+        
+        if isinstance(pixel_select, str):
+            if pixel_select.lower == 'all':
+                OrderedData[ParamSweeped[i] - offset,:,1] = ParentDatastore[i,:,:,1]# fine
+                OrderedData[ParamSweeped[i] - offset,:,0] = ParentDatastore[i,:,:,0]# coarse
+            else:
+                print("invalid pixel selection, did you mean 'all', or a an index from 0 to 15?")
+        else:
+            OrderedData[ParamSweeped[i] - offset,:,1] = ParentDatastore[i,:,pixel_select,1]# fine
+            OrderedData[ParamSweeped[i] - offset,:,0] = ParentDatastore[i,:,pixel_select,0]# coarse
+        
+        
     
     OrderedParamSweeped = sorted(ParamSweeped)
     
