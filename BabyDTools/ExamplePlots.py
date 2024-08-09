@@ -22,7 +22,7 @@ def CoarseFineCombinedPlot(Coarse,Fine,xs,xlabel='DAC setting'):
 
     fig.tight_layout()
     fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.06),
-          ncol=3, fancybox=True, shadow=True)
+        ncol=3, fancybox=True, shadow=True)
     fig.show()
 
     return fig, ax1, ax2
@@ -45,7 +45,7 @@ def CoarseFineSubPlots(Coarse,Fine):
     return fig, ax1, ax2
 
 
-def histogram_array(array, plotcoarse = True, numslices = 5, limfine = False, limcoarse = True, save_plot = False, savedir = 'plots', plotname = None, return_data = False):
+def histogram_array(array, plotcoarse = True, numslices = 5, set_limfine = False, limfine = (0,128), set_limcoarse = False, limcoarse = (0,256), save_plot = False, savedir = 'plots', plotname = None, return_data = False):
     """Takes in data array of format [xs,frames,ys,output_type] which has general shape of [16,N,16,3]
 
     Args:
@@ -95,8 +95,8 @@ def histogram_array(array, plotcoarse = True, numslices = 5, limfine = False, li
     ax1.legend()
     ax1.set_xlabel('Fine Count')
     ax1.set_ylabel('Frequency')
-    if limfine is True:
-        ax1.set_xlim(-0.25,max(fineave.ravel()) + 1.25)  # some "white space" is added around the data extremes to make plot better to look at
+    if set_limfine is True:
+        ax1.set_xlim(limfine[0],limfine[1])  # some "white space" is added around the data extremes to make plot better to look at
     
     
     if plotcoarse is True:    
@@ -104,8 +104,8 @@ def histogram_array(array, plotcoarse = True, numslices = 5, limfine = False, li
         ax2.set_xlabel('Coarse Count')
         ax2.set_ylabel('Frequency')
         
-        if limcoarse is True:
-            ax2.set_xlim(-0.25,max(coarseave.ravel()) + 1.25)
+        if set_limcoarse is True:
+            ax2.set_xlim(limcoarse[0],limcoarse[1])
 
 
     if save_plot is True:
@@ -151,6 +151,7 @@ def histogram_pixel(array, pixel_sel = (8,8), plottitle = 'Histogram of Pixel Ou
     ax1.set_ylabel('Frequency')
     if set_limfine is True:
         ax1.set_xlim(limfine[0],limfine[1])  # some "white space" is added around the data extremes to make plot better to look at
+    ax1.set_title(plottitle)
     
     if plotcoarse is True:
     
@@ -181,4 +182,26 @@ def histogram_pixel(array, pixel_sel = (8,8), plottitle = 'Histogram of Pixel Ou
         print('Coarse Stage Standard Deviation for pixel (8,8) = ',np.std(array[pixel_sel[0],:,pixel_sel[1],0]))
         
         
+        
 #* Automated plots for bias setting sweeps to use within "CalibrateASIC.py"
+
+def plotcapture(Coarse, Fine, plottitle): #savefig = False, foldertitle = 'ImagePlots'
+    
+    fig, (ax_F,ax_C) = plt.subplots(1,2, figsize = (10,10))
+    
+    im_C = ax_C.imshow(np.array(Coarse))
+    fig.colorbar(im_C, orientation='vertical')
+    ax_C.set_title('Pixel readout \n on coarse stage')
+    
+
+    im_F = ax_F.imshow(np.array(Fine))
+    fig.colorbar(im_F, orientation='vertical')
+    ax_F.set_title('Pixel readout \n on fine stage')
+    
+    fig.suptitle(f'Image plots of Baby D coarse and fine readout \n {plottitle}.')
+    
+    fig.show()
+    
+    # if savefig is True:
+    #     fig.savefig(f"C:/Users/rif36645/OneDrive - Science and Technology Facilities Council/Projects-DESKTOP-P8841A7/DynamiX local files/B16Local/Plots/{foldertitle}/ArrayMap_({plottitle}).png",bbox_inches = 'tight')
+    
